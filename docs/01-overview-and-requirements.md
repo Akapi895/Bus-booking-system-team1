@@ -126,6 +126,7 @@ Các mã **FR** mô tả khả năng nghiệp vụ, **không tương ứng một
 
 ### BF-01 - Đăng ký, xác minh email và đăng nhập
 
+
 ```mermaid
 flowchart TD
     A[Nhập thông tin đăng ký] --> B{Dữ liệu hợp lệ, email chưa tồn tại?}
@@ -145,6 +146,7 @@ flowchart TD
 Trường hợp gửi email thất bại, tài khoản có thể đã được tạo nhưng chưa xác minh; người dùng sử dụng chức năng gửi lại OTP theo quy tắc giới hạn tần suất.
 
 ### BF-02 - Tìm kiếm chuyến xe
+
 
 ```mermaid
 flowchart TD
@@ -206,6 +208,7 @@ flowchart TD
     E -->|Không| J --> K
     I --> K
 ```
+
 
 ### BF-05 - Quản trị chuyến xe
 

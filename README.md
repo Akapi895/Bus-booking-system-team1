@@ -4,9 +4,11 @@
 
 ### 1.1. Bối cảnh
 
-Hiện nay, nhu cầu di chuyển bằng xe khách giữa các tỉnh, thành phố ngày càng phổ biến. Người dùng thường phải tìm kiếm thông tin chuyến xe, thời gian khởi hành, giá vé và số ghế còn trống thông qua nhiều nguồn khác nhau. Việc đặt vé theo phương thức thủ công (phương thức truyền thống) có thể gây mất thời gian và khó quản lý thông tin đặt vé.
+Hiện nay, nhu cầu di chuyển bằng xe khách rất phổ biến. Tuy nhiên, việc quản lý thông tin chuyến xe, lịch trình, số ghế còn trống và đặt vé vẫn có thể gặp nhiều bất tiện nếu được thực hiện thông qua các phương thức thủ công (phương thức truyền thống).
 
-Bên cạnh đó, các nhà xe cần quản lý nhiều thông tin liên quan đến phương tiện, tuyến đường, lịch trình và vé đã được đặt. Nếu quản lý bằng phương thức thủ công, việc cập nhật số lượng ghế còn trống và theo dõi các lượt đặt vé có thể dễ xảy ra sai sót.
+Về phía khách hàng, khó khăn trong việc tìm kiếm chuyến xe phù hợp và kiểm tra tình trạng ghế có thể mất nhiều thời gian, mất thời gian đi lại đến quầy để đặt vé.
+
+Về phía nhà xe, việc quản lý chuyến xe, số lượng vé và thông tin hành khách cần đảm bảo tính chính xác, đặc biệt khi có nhiều yêu cầu đặt vé cùng lúc.
 
 Vì vậy, hệ thống quản lý đặt vé xe khách trực tuyến được xây dựng nhằm cung cấp một nền tảng tập trung để người dùng tìm kiếm chuyến xe và thực hiện đặt vé, đồng thời hỗ trợ quản trị viên quản lý các dữ liệu cơ bản của hệ thống.
 
@@ -103,7 +105,6 @@ Khi kết nối database thành công, **Flyway kiểm tra/áp dụng các migra
 | [6 Hướng dẫn chạy](docs/06-running-guide.md) | Cấu hình, khởi chạy, kiểm tra và xử lý lỗi |
 | [7 Kết quả kiểm thử tải](load-tests/README.md) | Kết quả baseline Locust, CSV và console |
 | [8 Hướng dẫn kiểm thử tải](load-tests/scripts/load_testing.md) | Hướng dẫn chạy Locust, tạo fixture và phân tích kết quả |
-
 
 > **Lưu ý:** Không commit `.env`, mật khẩu, JWT/OTP secret hay dữ liệu cá nhân thật. Khi thay đổi database, tạo migration Flyway mới thay vì sửa migration đã áp dụng.
 
