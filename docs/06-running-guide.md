@@ -1,4 +1,4 @@
-# 6. Hướng dẫn chạy BusBooking (Running Guide)
+# 6. Hướng dẫn chạy
 
 
 ## 6.1. Các thành phần cần chạy

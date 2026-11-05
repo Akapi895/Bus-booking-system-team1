@@ -1,4 +1,4 @@
-# 02. Thiết kế Database
+# 2. Thiết kế Database
 
 ## 2.1. Tổng quan
 

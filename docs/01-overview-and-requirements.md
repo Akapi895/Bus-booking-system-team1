@@ -16,7 +16,7 @@ BusBooking Pha 1 tập trung vào **backend và nghiệp vụ cốt lõi**, chư
 
 ## 1.2. Phạm vi hệ thống
 
-### 1.2.1. Trong phạm vi Pha 1
+### 1.2.1. Trong phạm vi
 
 - **Tài khoản và bảo mật:** đăng ký, xác minh/gửi lại OTP email, đăng nhập, lấy thông tin người dùng, cập nhật hồ sơ, phân quyền `USER` / `ADMIN` / `SUPER_ADMIN`.
 - **Tra cứu công khai:** lấy danh sách địa điểm, tìm kiếm chuyến xe và xem chi tiết chuyến xe.
@@ -26,7 +26,7 @@ BusBooking Pha 1 tập trung vào **backend và nghiệp vụ cốt lõi**, chư
 - **Quản lý vai trò:** chỉ `SUPER_ADMIN` được nâng/hạ vai trò giữa `USER` và `ADMIN` theo điều kiện hệ thống.
 - **Tài liệu và kiểm thử:** Swagger/OpenAPI, kiểm thử chức năng và bộ baseline kiểm thử tải Pha 1.
 
-### 1.2.2. Ngoài phạm vi Pha 1
+### 1.2.2. Ngoài phạm vi
 
 - Thanh toán trực tuyến, hoàn tiền tự động và đối soát thanh toán.
 - Chọn số ghế/vị trí ghế cụ thể trên sơ đồ xe; hệ thống hiện quản lý **số lượng ghế**.
@@ -34,7 +34,7 @@ BusBooking Pha 1 tập trung vào **backend và nghiệp vụ cốt lõi**, chư
 - Ứng dụng mobile riêng; frontend hoàn chỉnh không phải phạm vi của backend này.
 - Đánh giá nhà xe, khuyến mãi, trò chuyện và thông báo thời gian thực.
 - Xóa vật lý dữ liệu nền tảng như nhà xe, phương tiện, địa điểm, tuyến đường đã có quan hệ nghiệp vụ.
-- API liệt kê toàn bộ người dùng hoặc đổi trạng thái `ACTIVE/INACTIVE` của người dùng bằng chức năng Admin (chưa triển khai trong bộ 32 API).
+- API liệt kê toàn bộ người dùng hoặc đổi trạng thái `ACTIVE/INACTIVE` của người dùng bằng chức năng Admin.
 - Các cơ chế vận hành quy mô lớn như phân tán tải, message queue và auto-scaling.
 
 ## 1.3. Tác nhân (Actors)
@@ -54,51 +54,51 @@ Các mã **FR** mô tả khả năng nghiệp vụ, **không tương ứng một
 
 ### 1.4.1. Tài khoản, xác thực và phân quyền
 
-**FR-01 — Đăng ký tài khoản.** Người dùng cung cấp họ tên, email, số điện thoại và mật khẩu. Hệ thống kiểm tra dữ liệu hợp lệ và email không trùng; tài khoản mới có role `USER` và chưa xác minh email.
+**FR-01 - Đăng ký tài khoản.** Người dùng cung cấp họ tên, email, số điện thoại và mật khẩu. Hệ thống kiểm tra dữ liệu hợp lệ và email không trùng; tài khoản mới có role `USER` và chưa xác minh email.
 
-**FR-02 — Xác minh email bằng OTP.** Sau đăng ký, hệ thống gửi mã OTP qua email. Người dùng xác minh bằng email và mã OTP hợp lệ trước khi được đăng nhập. OTP không được trả về trong phản hồi API.
+**FR-02 - Xác minh email bằng OTP.** Sau đăng ký, hệ thống gửi mã OTP qua email. Người dùng xác minh bằng email và mã OTP hợp lệ trước khi được đăng nhập. OTP không được trả về trong phản hồi API.
 
-**FR-03 — Gửi lại OTP.** Người dùng chưa xác minh email có thể yêu cầu gửi mã mới. Việc gửi lại chịu giới hạn tần suất; mã mới thay thế mã cũ.
+**FR-03 - Gửi lại OTP.** Người dùng chưa xác minh email có thể yêu cầu gửi mã mới. Việc gửi lại chịu giới hạn tần suất; mã mới thay thế mã cũ.
 
-**FR-04 — Đăng nhập và cấp JWT.** Người dùng đăng nhập bằng email và mật khẩu. Chỉ tài khoản `ACTIVE`, đã xác minh email mới được cấp JWT để truy cập endpoint được bảo vệ.
+**FR-04 - Đăng nhập và cấp JWT.** Người dùng đăng nhập bằng email và mật khẩu. Chỉ tài khoản `ACTIVE`, đã xác minh email mới được cấp JWT để truy cập endpoint được bảo vệ.
 
-**FR-05 — Xem/cập nhật hồ sơ.** Người dùng đã đăng nhập có thể xem thông tin tài khoản và cập nhật họ tên, số điện thoại của mình. Không được tự sửa role, trạng thái hoặc cờ xác minh email qua API hồ sơ.
+**FR-05 - Xem/cập nhật hồ sơ.** Người dùng đã đăng nhập có thể xem thông tin tài khoản và cập nhật họ tên, số điện thoại của mình. Không được tự sửa role, trạng thái hoặc cờ xác minh email qua API hồ sơ.
 
-**FR-06 — Kiểm soát truy cập.** Các endpoint yêu cầu đăng nhập phải kiểm tra JWT và vai trò tương ứng. Các tài nguyên gắn với người dùng, đặc biệt booking, phải được kiểm tra quyền sở hữu ở tầng nghiệp vụ.
+**FR-06 - Kiểm soát truy cập.** Các endpoint yêu cầu đăng nhập phải kiểm tra JWT và vai trò tương ứng. Các tài nguyên gắn với người dùng, đặc biệt booking, phải được kiểm tra quyền sở hữu ở tầng nghiệp vụ.
 
-**FR-07 — Quản lý vai trò.** Chỉ `SUPER_ADMIN` có thể chuyển vai trò `USER` ↔ `ADMIN` theo các điều kiện hợp lệ; không cấp hoặc thay thế `SUPER_ADMIN` qua HTTP API.
+**FR-07 - Quản lý vai trò.** Chỉ `SUPER_ADMIN` có thể chuyển vai trò `USER` ↔ `ADMIN` theo các điều kiện hợp lệ; không cấp hoặc thay thế `SUPER_ADMIN` qua HTTP API.
 
 ### 1.4.2. Địa điểm và tra cứu chuyến xe
 
-**FR-08 — Tra cứu địa điểm công khai.** Khách truy cập có thể lấy danh sách địa điểm và sử dụng điều kiện tìm kiếm được hỗ trợ để xác định điểm đi/điểm đến.
+**FR-08 - Tra cứu địa điểm công khai.** Khách truy cập có thể lấy danh sách địa điểm và sử dụng điều kiện tìm kiếm được hỗ trợ để xác định điểm đi/điểm đến.
 
-**FR-09 — Tìm kiếm chuyến xe.** Khách truy cập có thể lọc chuyến theo điểm đi, điểm đến và ngày khởi hành thông qua API tìm kiếm công khai.
+**FR-09 - Tìm kiếm chuyến xe.** Khách truy cập có thể lọc chuyến theo điểm đi, điểm đến và ngày khởi hành thông qua API tìm kiếm công khai.
 
-**FR-10 — Xem chi tiết chuyến.** Hệ thống cung cấp thông tin chuyến, tuyến đường, nhà xe/phương tiện (theo dữ liệu phản hồi API), giờ khởi hành/đến, giá vé, số ghế còn trống và trạng thái.
+**FR-10 - Xem chi tiết chuyến.** Hệ thống cung cấp thông tin chuyến, tuyến đường, nhà xe/phương tiện (theo dữ liệu phản hồi API), giờ khởi hành/đến, giá vé, số ghế còn trống và trạng thái.
 
 ### 1.4.3. Đặt vé và lịch sử booking
 
-**FR-11 — Tạo booking.** `USER` đã xác thực có thể đặt số lượng vé hợp lệ cho một chuyến, cung cấp thông tin hành khách. Hệ thống lưu giá tại thời điểm đặt, tổng tiền, mã booking và trạng thái.
+**FR-11 - Tạo booking.** `USER` đã xác thực có thể đặt số lượng vé hợp lệ cho một chuyến, cung cấp thông tin hành khách. Hệ thống lưu giá tại thời điểm đặt, tổng tiền, mã booking và trạng thái.
 
-**FR-12 — Kiểm tra khả năng đặt vé.** Hệ thống phải kiểm tra chuyến có đủ điều kiện phục vụ và đủ số ghế; từ chối khi số lượng yêu cầu vượt số ghế có thể bán. Thao tác đồng thời không được làm phát sinh tình trạng bán vượt sức chứa.
+**FR-12 - Kiểm tra khả năng đặt vé.** Hệ thống phải kiểm tra chuyến có đủ điều kiện phục vụ và đủ số ghế; từ chối khi số lượng yêu cầu vượt số ghế có thể bán. Thao tác đồng thời không được làm phát sinh tình trạng bán vượt sức chứa.
 
-**FR-13 — Xem booking.** `USER` xem danh sách booking của mình và thông tin chi tiết booking được phép truy cập. `ADMIN`/`SUPER_ADMIN` được xem booking theo phạm vi quản trị.
+**FR-13 - Xem booking.** `USER` xem danh sách booking của mình và thông tin chi tiết booking được phép truy cập. `ADMIN`/`SUPER_ADMIN` được xem booking theo phạm vi quản trị.
 
-**FR-14 — Hủy booking.** Chủ booking hoặc `ADMIN`/`SUPER_ADMIN` được hủy booking chưa `CANCELLED` khi ghế có thể hoàn mà không vượt capacity xe; cập nhật trạng thái và hoàn ghế trong cùng giao dịch. Hiện chưa có hạn hủy theo giờ khởi hành hoặc trạng thái Trip; hủy lặp trả `400 BUSINESS_ERROR`.
+**FR-14 - Hủy booking.** Chủ booking hoặc `ADMIN`/`SUPER_ADMIN` được hủy booking chưa `CANCELLED` khi ghế có thể hoàn mà không vượt capacity xe; cập nhật trạng thái và hoàn ghế trong cùng giao dịch. Hiện chưa có hạn hủy theo giờ khởi hành hoặc trạng thái Trip; hủy lặp trả `400 BUSINESS_ERROR`.
 
 ### 1.4.4. Quản trị danh mục và vận hành
 
-**FR-15 — Quản lý nhà xe.** `ADMIN`/`SUPER_ADMIN` xem danh sách, tạo, cập nhật nhà xe; có thể chuyển trạng thái khi đáp ứng điều kiện liên quan. Không hỗ trợ xóa vật lý trong Pha 1.
+**FR-15 - Quản lý nhà xe.** `ADMIN`/`SUPER_ADMIN` xem danh sách, tạo, cập nhật nhà xe; có thể chuyển trạng thái khi đáp ứng điều kiện liên quan. Không hỗ trợ xóa vật lý trong Pha 1.
 
-**FR-16 — Quản lý địa điểm.** `ADMIN`/`SUPER_ADMIN` xem danh sách, tạo và cập nhật địa điểm. Không có API xóa vật lý hoặc chuyển trạng thái địa điểm trong Pha 1.
+**FR-16 - Quản lý địa điểm.** `ADMIN`/`SUPER_ADMIN` xem danh sách, tạo và cập nhật địa điểm. Không có API xóa vật lý hoặc chuyển trạng thái địa điểm trong Pha 1.
 
-**FR-17 — Quản lý phương tiện.** `ADMIN`/`SUPER_ADMIN` xem danh sách, tạo và cập nhật phương tiện, gồm nhà xe, biển số, loại xe, sức chứa và trạng thái; các thay đổi phải tôn trọng chuyến xe đang sử dụng phương tiện.
+**FR-17 - Quản lý phương tiện.** `ADMIN`/`SUPER_ADMIN` xem danh sách, tạo và cập nhật phương tiện, gồm nhà xe, biển số, loại xe, sức chứa và trạng thái; các thay đổi phải tôn trọng chuyến xe đang sử dụng phương tiện.
 
-**FR-18 — Quản lý tuyến đường.** `ADMIN`/`SUPER_ADMIN` xem danh sách, tạo, cập nhật tuyến đường với điểm đi, điểm đến và thời gian dự kiến; không cho phép thay đổi trái quy tắc khi tuyến đã được chuyến xe tham chiếu.
+**FR-18 - Quản lý tuyến đường.** `ADMIN`/`SUPER_ADMIN` xem danh sách, tạo, cập nhật tuyến đường với điểm đi, điểm đến và thời gian dự kiến; không cho phép thay đổi trái quy tắc khi tuyến đã được chuyến xe tham chiếu.
 
-**FR-19 — Quản lý chuyến xe.** `ADMIN`/`SUPER_ADMIN` xem danh sách, tạo và cập nhật chuyến xe. Hủy chuyến thực hiện bằng chuyển trạng thái sang `CANCELLED`, **không xóa vật lý**; việc hủy phải thỏa điều kiện nghiệp vụ.
+**FR-19 - Quản lý chuyến xe.** `ADMIN`/`SUPER_ADMIN` xem danh sách, tạo và cập nhật chuyến xe. Hủy chuyến thực hiện bằng chuyển trạng thái sang `CANCELLED`, **không xóa vật lý**; việc hủy phải thỏa điều kiện nghiệp vụ.
 
-**FR-20 — Tra cứu booking quản trị.** `ADMIN`/`SUPER_ADMIN` được xem danh sách booking toàn hệ thống và các bộ lọc được hỗ trợ. Thao tác xem/hủy booking cụ thể dùng các API Booking hiện có theo quyền truy cập; không có endpoint Admin để tùy ý thay đổi trạng thái booking.
+**FR-20 - Tra cứu booking quản trị.** `ADMIN`/`SUPER_ADMIN` được xem danh sách booking toàn hệ thống và các bộ lọc được hỗ trợ. Thao tác xem/hủy booking cụ thể dùng các API Booking hiện có theo quyền truy cập; không có endpoint Admin để tùy ý thay đổi trạng thái booking.
 
 ## 1.5. Quy tắc nghiệp vụ (Business Rules)
 
@@ -124,7 +124,7 @@ Các mã **FR** mô tả khả năng nghiệp vụ, **không tương ứng một
 
 ## 1.6. Luồng nghiệp vụ chính (Business Flows)
 
-### BF-01 — Đăng ký, xác minh email và đăng nhập
+### BF-01 - Đăng ký, xác minh email và đăng nhập
 
 ```mermaid
 flowchart TD
@@ -144,7 +144,7 @@ flowchart TD
 
 Trường hợp gửi email thất bại, tài khoản có thể đã được tạo nhưng chưa xác minh; người dùng sử dụng chức năng gửi lại OTP theo quy tắc giới hạn tần suất.
 
-### BF-02 — Tìm kiếm chuyến xe
+### BF-02 - Tìm kiếm chuyến xe
 
 ```mermaid
 flowchart TD
@@ -167,7 +167,7 @@ flowchart TD
     G --> H
 ```
 
-### BF-03 — Tạo booking
+### BF-03 - Tạo booking
 
 ```mermaid
 flowchart TD
@@ -183,7 +183,7 @@ flowchart TD
 
 Việc kiểm tra/cập nhật ghế phải xử lý được các yêu cầu đặt đồng thời; chỉ kiểm tra số ghế một lần trước khi lưu là chưa đủ để bảo đảm an toàn cạnh tranh.
 
-### BF-04 — Hủy booking
+### BF-04 - Hủy booking
 
 ```mermaid
 flowchart TD
@@ -207,7 +207,7 @@ flowchart TD
     I --> K
 ```
 
-### BF-05 — Quản trị chuyến xe
+### BF-05 - Quản trị chuyến xe
 
 ```mermaid
 flowchart TD

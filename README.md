@@ -68,7 +68,7 @@ src/main/java/com/example/busbooking/
 | API và kiểm thử | REST/JSON, Springdoc OpenAPI/Swagger, JUnit, Mockito, Locust |
 | Môi trường | Có thể dùng Docker cho PostgreSQL/Mailpit; cách chạy container phụ thuộc cấu hình repository |
 
-## 4. Cấu hình và chạy nhanh (Windows / PowerShell)
+## 4. Cấu hình và chạy nhanh (có thể xem chi tiết tại [Running Guide](docs/06-running-guide.md))
 
 **Cần có:** JDK 21, PostgreSQL, SMTP (có thể dùng Mailpit) và source code chứa `pom.xml`, `mvnw.cmd`.
 
@@ -91,16 +91,27 @@ Khi kết nối database thành công, **Flyway kiểm tra/áp dụng các migra
 - **Kiểm thử tự động:** JUnit/Mockito và integration test; chạy `.\mvnw.cmd test` sau khi cấu hình **database test riêng** như Running Guide.
 - **Load test Pha 1 (Kaggle CPU, Locust):** tại 20 người dùng ảo, snapshot CSV ghi GET **2.834 request / 48,01 RPS**, POST **2.789 / 47,21 RPS**; console cuối lượt ghi tương ứng **2.864 / 48,05 RPS** và **2.816 / 47,16 RPS**. Cả hai nguồn ghi 0 lỗi; nguyên nhân chênh lệch và mốc thống kê chuẩn **chưa xác minh**. Đây là *baseline thử nghiệm*, không phải giới hạn hiệu năng của hệ thống. Xem [kết quả kiểm thử tải](load-tests/README.md).
 
-## 6. Tài liệu và bàn giao Pha 2
+## 6. Tài liệu chi tiết và bàn giao Pha 2
 
 | Tài liệu | Nội dung |
 |---|---|
-| [01 Overview and Requirements](docs/01-overview-and-requirements.md) | Yêu cầu, actors, nghiệp vụ |
-| [02 Database Design](docs/02-database-design.md) | ERD, ràng buộc, Flyway migrations |
-| [03 System Architecture](docs/03-system-architecture.md) | Thành phần, kiến trúc và hướng phụ thuộc |
-| [04 API Design](docs/04-api-design.md) | Các API, phân quyền và hợp đồng |
-| [05 Source Code Design](docs/05-source-code-design.md) | Tổ chức packages, services, ports và adapters |
-| [06 Running Guide](docs/06-running-guide.md) | Cấu hình, khởi chạy, kiểm tra và xử lý lỗi |
+| [1 Tổng quan và yêu cầu hệ thống](docs/01-overview-and-requirements.md) | Yêu cầu, actors, nghiệp vụ |
+| [2 Thiết kế database](docs/02-database-design.md) | ERD, ràng buộc, Flyway migrations |
+| [3 Kiến trúc hệ thống (pha 1)](docs/03-system-architecture.md) | Thành phần, kiến trúc và hướng phụ thuộc |
+| [4 Thiết kế API](docs/04-api-design.md) | Các API, phân quyền và hợp đồng |
+| [5 Tổ chức mã nguồn](docs/05-source-code-design.md) | Tổ chức packages, services, ports và adapters |
+| [6 Hướng dẫn chạy](docs/06-running-guide.md) | Cấu hình, khởi chạy, kiểm tra và xử lý lỗi |
+| [7 Kết quả kiểm thử tải](load-tests/README.md) | Kết quả baseline Locust, CSV và console |
+| [8 Hướng dẫn kiểm thử tải](load-tests/scripts/load_testing.md) | Hướng dẫn chạy Locust, tạo fixture và phân tích kết quả |
 
 
 > **Lưu ý:** Không commit `.env`, mật khẩu, JWT/OTP secret hay dữ liệu cá nhân thật. Khi thay đổi database, tạo migration Flyway mới thay vì sửa migration đã áp dụng.
+
+### Gợi ý cải tiến cho Pha 2
+
+- **PostgreSQL và tìm kiếm chuyến xe:** Truy vấn hiện trả về toàn bộ danh sách, còn một số index tăng tốc đã được hoãn ở V16; nên phân tích bằng `EXPLAIN ANALYZE` trên dữ liệu đại diện để chọn index phù hợp và bổ sung phân trang.
+- **Booking đồng thời:** Pha 1 đã có transaction, khóa bi quan và cập nhật ghế có điều kiện; khi tải lớn, cần đo thời gian chờ khóa để tối ưu thời gian giữ khóa, timeout và connection pool. Cân nhắc cơ chế idempotency để tránh tạo booking lặp khi client gửi lại yêu cầu.
+- **Redis Cache cho API đọc:** Các lượt đọc lặp lại có thể làm tăng tải PostgreSQL; cân nhắc cache địa điểm và kết quả tìm chuyến với TTL, cơ chế vô hiệu hóa khi dữ liệu thay đổi. Số ghế khi đặt vé vẫn phải được kiểm tra và cập nhật tại database trong transaction.
+- **Monitoring và logging:** Bổ sung metric độ trễ API, lỗi, connection pool và thời gian chờ khóa để hỗ trợ phát hiện điểm nghẽn. Chuẩn hóa log có mã liên kết request và cảnh báo, đồng thời che thông tin nhạy cảm.
+- **Mở rộng, Docker và CI/CD:** Trên nền Dockerfile/Compose hiện có, chuẩn hóa cấu hình triển khai, bổ sung health check cho backend và pipeline kiểm thử, build image, triển khai. Trước khi chạy nhiều backend instance, cần đưa bộ đếm rate limit đang lưu trong bộ nhớ sang cơ chế dùng chung.
+- **Kiểm thử tải và bảo mật:** Mở rộng baseline Locust bằng dữ liệu lớn hơn, nhiều tài khoản, tải hỗn hợp đọc/ghi và tranh chấp trên cùng chuyến, kết hợp kiểm tra tính nhất quán ghế. Bổ sung kiểm thử bảo mật tự động và quét dependency để mở rộng độ bao phủ cho JWT, OTP, phân quyền và rate limit đã có.

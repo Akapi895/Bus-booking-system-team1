@@ -1,4 +1,4 @@
-# 5. Thiết kế mã nguồn BusBooking
+# 5. Tổ chức mã nguồn
 
 ## 5.1. Tổng quan
 
@@ -306,5 +306,5 @@ Mũi tên adapter trỏ đến port biểu thị **dependency inversion**: Busin
 | Integration | `TripBookingIntegrationTest`, `CoreCatalogWorkflowIntegrationTest`, `AdminManagementIntegrationTest` |
 | Security / Notification | `JwtAuthenticationFilterTest`, `JwtServiceTest`, `AuthRequestRateLimiterTest`, `SmtpEmailVerificationSenderTest` |
 
-Việc **có class test** không tự chứng minh tất cả test đã pass; kết quả chạy test cần lấy từ báo cáo build/CI tương ứng. Bài kiểm thử tải trên Kaggle CPU được lưu riêng trong `load-tests/`, tránh nhầm với unit/integration test Maven.
+Bài kiểm thử tải trên Kaggle CPU được lưu riêng trong `load-tests/`, tránh nhầm với unit/integration test Maven.
 
