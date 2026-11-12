@@ -183,7 +183,14 @@ Báo cáo cuối `08-phase2-results.md`: bảng yêu cầu phi chức năng ở 
 
 ## 4. Quy ước tránh conflict
 
-- **Branch:** `feat/ws0-observability`, `feat/ws1-booking`, `feat/ws2-trip-schedule`, `feat/ws3-outbox`, `feat/ws4-scale-out`.
+- **Nhánh cố định:**
+  - `main`: chỉ chủ repo merge từ `dev` vào, khi xong một giai đoạn.
+  - `dev`: nhánh tích hợp, mọi PR đều nhắm vào đây.
+  - `upstream-main`: bản sao repo gốc, không commit vào.
+- **Nhánh làm việc:** đặt tên theo mẫu `<tên>/<loại>/<chủ đề>`, tách từ `dev` và mở PR vào `dev`.
+  - `<loại>` là `feat`, `fix`, `docs`, `test` hoặc `chore`.
+  - Ví dụ: `haint/docs/phase-2-plan`, `<tên-A>/feat/ws0-observability`, `<tên-B>/feat/ws1-booking`, `<tên-C>/feat/ws2-trip-schedule`, `<tên-D>/feat/ws3-outbox`, `<tên-A>/feat/ws4-scale-out`.
+  - Không ai đặt nhánh trùng đúng tên người (ví dụ chỉ `haint`), vì git sẽ không tạo được các nhánh `haint/...`.
 - **Số migration đặt trước:** `V17` WS1 idempotency · `V18` WS2 chống trùng lịch · `V19` WS3 outbox · `V20` WS1 index. Merge theo đúng thứ tự số; nếu DB dev báo lỗi Flyway thì xóa volume rồi chạy lại.
 - **File dùng chung:**
   - `SpringDataTripRepository`: WS1 và WS2 chỉ **thêm method mới**, không sửa method của nhau.
