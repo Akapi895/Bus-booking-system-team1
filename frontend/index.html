@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>BusBooking Demo</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <strong>BusBooking Demo</strong>
+  <nav>
+    <button data-view="search">Tìm chuyến</button>
+    <button data-view="bookings" class="auth-only">Vé của tôi</button>
+    <button data-view="stress" class="auth-only">Thử tải đồng thời</button>
+    <button data-view="auth" class="guest-only">Đăng nhập</button>
+  </nav>
+  <span id="who"></span>
+  <button id="logout" class="auth-only">Đăng xuất</button>
+</header>
+
+<div id="toast" hidden></div>
+
+<main>
+  <!-- Search -->
+  <section id="view-search">
+    <h2>Tìm chuyến</h2>
+    <form id="search-form" class="row">
+      <label>Điểm đi <select name="originId"><option value="">Tất cả</option></select></label>
+      <label>Điểm đến <select name="destinationId"><option value="">Tất cả</option></select></label>
+      <label>Ngày đi <input type="date" name="departureDate"></label>
+      <button>Tìm</button>
+    </form>
+    <table>
+      <thead><tr><th>#</th><th>Tuyến</th><th>Nhà xe</th><th>Khởi hành</th><th>Giá</th><th>Còn</th><th>Trạng thái</th><th></th></tr></thead>
+      <tbody id="trips"></tbody>
+    </table>
+
+    <dialog id="book-dialog">
+      <form id="book-form" method="dialog">
+        <h3>Đặt vé chuyến #<span id="book-trip"></span></h3>
+        <input type="hidden" name="tripId">
+        <label>Tên hành khách <input name="passengerName" required></label>
+        <label>SĐT <input name="passengerPhone" required></label>
+        <label>Số ghế <input type="number" name="quantity" min="1" value="1" required></label>
+        <div class="row">
+          <button value="cancel" formnovalidate>Huỷ</button>
+          <button value="ok">Đặt vé</button>
+        </div>
+      </form>
+    </dialog>
+  </section>
+
+  <!-- My bookings -->
+  <section id="view-bookings" hidden>
+    <h2>Vé của tôi</h2>
+    <table>
+      <thead><tr><th>Mã</th><th>Chuyến</th><th>Hành khách</th><th>Số ghế</th><th>Tổng</th><th>Trạng thái</th><th>Đặt lúc</th><th></th></tr></thead>
+      <tbody id="bookings"></tbody>
+    </table>
+  </section>
+
+  <!-- Concurrency demo -->
+  <section id="view-stress" hidden>
+    <h2>Thử tải đồng thời</h2>
+    <p>Bắn N yêu cầu đặt vé <b>cùng lúc</b> vào một chuyến (mỗi yêu cầu 1 ghế). Hệ thống đúng thì số vé thành công không bao giờ vượt số ghế còn trống.</p>
+    <form id="stress-form" class="row">
+      <label>Mã chuyến <input type="number" name="tripId" required></label>
+      <label>Số yêu cầu N <input type="number" name="n" min="1" max="500" value="50" required></label>
+      <button>Chạy</button>
+    </form>
+    <pre id="stress-out"></pre>
+  </section>
+
+  <!-- Auth -->
+  <section id="view-auth" hidden>
+    <div class="cards">
+      <form id="login-form" class="card">
+        <h3>Đăng nhập</h3>
+        <label>Email <input type="email" name="email" required></label>
+        <label>Mật khẩu <input type="password" name="password" required></label>
+        <button>Đăng nhập</button>
+      </form>
+      <form id="register-form" class="card">
+        <h3>Đăng ký</h3>
+        <label>Họ tên <input name="fullName" required></label>
+        <label>Email <input type="email" name="email" required></label>
+        <label>Mật khẩu <input type="password" name="password" required></label>
+        <label>SĐT <input name="phone" required></label>
+        <button>Đăng ký</button>
+      </form>
+      <form id="verify-form" class="card">
+        <h3>Xác minh email</h3>
+        <p class="hint">Lấy mã 6 số trong Mailpit: <a href="http://localhost:8026" target="_blank">localhost:8026</a></p>
+        <label>Email <input type="email" name="email" required></label>
+        <label>Mã OTP <input name="code" pattern="[0-9]{6}" required></label>
+        <button>Xác minh</button>
+      </form>
+    </div>
+  </section>
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>
